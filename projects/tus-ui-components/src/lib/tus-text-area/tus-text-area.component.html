@@ -1,0 +1,28 @@
+<div class="">
+  <label class="text-base font-medium dark:text-gray-200">
+    {{ label }}
+    <span
+      *ngIf="!mandatory"
+      class="bg-gray-200 text-gray-600 dark:bg-gray-500 dark:text-gray-300 px-5 py-1 text-sm rounded-md"
+      >Optional</span
+    >
+  </label>
+  <span *ngIf="!isSkeletonLoading; else skeleton">
+    <textarea
+      class="mt-2 w-full border-gray-300 border-2 border-solid rounded transition ease-in-out focus:border-blue-600 focus:border-2 focus:outline-none px-4 pt-3 md:px-5  dark:text-gray-200 hover:border-gray-400 {{
+        readonly
+          ? 'opacity-75 bg-gray-200 cursor-not-allowed border-gray-200 focus:border-gray-200'
+          : ''
+      }} dark:bg-gray-900 dark:border-0 dark:border-gray-500 hover:dark:border-gray-400"
+      [placeholder]="placeholder"
+      rows="3"
+      [formControl]="control"
+      [readOnly]="readonly"
+    ></textarea>
+  </span>
+  <ng-template #skeleton>
+    <span
+      class="animate-pulse form-control block w-full h-20 font-normal rounded bg-gray-300 dark:bg-gray-500"
+    ></span>
+  </ng-template>
+</div>

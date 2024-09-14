@@ -1,0 +1,160 @@
+<div #containerDiv class="w-full relative" [class]="className">
+  <div class="{{ isSkeletonLoading ? '' : 'mb-2' }}" *ngIf="labelText">
+    <label class="text-base font-medium dark:text-gray-200">
+      {{ labelText }}
+      <span
+        *ngIf="!mandatory"
+        class="bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300 px-5 ml-1 py-1 rounded-md text-sm"
+        >Optional</span
+      >
+    </label>
+  </div>
+  <div
+    class="w-full flex items-center relative"
+    (click)="show()"
+    *ngIf="!isSkeletonLoading; else skeleton"
+  >
+    <input
+      type="text"
+      [placeholder]="placeholder ? placeholder : 'Search....'"
+      class="focus:outline-0 px-2 rounded-md border-2 w-full pr-10 h-10 whitespace-nowrap overflow-ellipsis overflow-hidden dark:text-gray-200 dark:bg-gray-900 dark:border-gray-500 hover:dark:border-gray-400 dark:border-0"
+      [class.cursor-pointer]="isReadOnly && !isDisabled"
+      [ngClass]="
+        isDisabled
+          ? 'cursor-not-allowed opacity-75 bg-gray-200 border-gray-200 focus:border-gray-200'
+          : ''
+      "
+      [(ngModel)]="inputValue"
+      (input)="getInput()"
+      [readonly]="isReadOnly"
+      [disabled]="isDisabled"
+      (input)="setSearch()"
+      [class]="height"
+    />
+
+    <div
+      *ngIf="isDropDown; else beforeFocus"
+      class="absolute cursor-pointer "
+      [class.hidden]="!searchVisible"
+      [class]="isPlusIcon ? 'right-16 ' : 'right-2'"
+    >
+      <span *ngIf="isClear; else dropUp" (click)="clearValue()">
+        <!-- x mark -->
+        <svg
+          id="Capa_1"
+          enable-background="new 0 0 320.591 320.591"
+          viewBox="0 0 320.591 320.591"
+          class="w-3 fill-gray-700 dark:fill-gray-200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g>
+            <g id="close_1_">
+              <path
+                d="m30.391 318.583c-7.86.457-15.59-2.156-21.56-7.288-11.774-11.844-11.774-30.973 0-42.817l257.812-257.813c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875l-259.331 259.331c-5.893 5.058-13.499 7.666-21.256 7.288z"
+              />
+              <path
+                d="m287.9 318.583c-7.966-.034-15.601-3.196-21.257-8.806l-257.813-257.814c-10.908-12.738-9.425-31.908 3.313-42.817 11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414-6.35 5.522-14.707 8.161-23.078 7.288z"
+              />
+            </g>
+          </g>
+        </svg>
+      </span>
+      <ng-template #dropUp>
+        <!-- up arrow -->
+        <svg
+          fill="none"
+          viewBox="0 0 32 32"
+          class="w-5 fill-gray-500 dark:fill-gray-200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m26.7125 19.2875-10-9.99999c-.1896-.18778-.4456-.29313-.7125-.29313-.2668 0-.5229.10535-.7125.29313l-9.99999 9.99999c-.13566.1446-.22761.3246-.26521.5193-.03761.1947-.01933.396.05271.5807.0765.182.20517.3373.36978.4463s.3578.1668.55522.1662h19.99999c.1974.0006.3906-.0572.5552-.1662s.2933-.2643.3698-.4463c.0721-.1847.0903-.386.0527-.5807s-.1295-.3747-.2652-.5193z"
+          />
+        </svg>
+      </ng-template>
+    </div>
+
+    <ng-template #beforeFocus>
+      <div
+        class="absolute transition-all"
+        [class]="isPlusIcon ? 'right-16' : 'right-2'"
+      >
+        <!-- down arrow -->
+        <svg
+          fill="none"
+          viewBox="0 0 32 32"
+          class="w-5 fill-gray-500 dark:fill-gray-200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m26.925 11.6125c-.0765-.182-.2052-.3373-.3698-.4463s-.3578-.1668-.5552-.1662h-20c-.19743-.0006-.39062.0572-.55523.1662s-.29327.2643-.36977.4463c-.07205.1847-.09032.386-.05272.5807.03761.1947.12956.3747.26522.5193l10 10c.1911.1848.4466.2881.7125.2881s.5214-.1033.7125-.2881l10-10c.1357-.1446.2276-.3246.2652-.5193s.0193-.396-.0527-.5807z"
+          />
+        </svg>
+      </div>
+    </ng-template>
+  </div>
+  <ng-template #skeleton>
+    <span
+      class="animate-pulse form-control block w-full h-12 font-normal rounded bg-gray-300 dark:bg-gray-700"
+    ></span>
+  </ng-template>
+  <div
+    *ngIf="isPlusIcon && !isSkeletonLoading"
+    class="h-12 bg-white border-2 w-14 rounded-r-md cursor-pointer hover:bg-red-600 group -ml-2 z-0 flex items-center justify-center text-2xl absolute right-0 {{ labelText ? 'top-8' : '-top-0' }} dark:bg-gray-900 dark:border-gray-500 hover:dark:border-gray-400"
+    (click)="onPlusIconClickFnc()"
+  >
+    <svg
+      class="h-6 w-6 text-red-600 group-hover:text-white"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="4"
+        d="M12 4v16m8-8H4"
+      />
+    </svg>
+  </div>
+
+  <div
+    class="w-full overflow-y-auto bg-white dark:bg-gray-900 max-h-60 z-10 absolute mt-1 transition ease-in-out"
+    [class]="searchVisible ? 'border-2 dark:border-gray-500 rounded-md' : 'border-0'"
+    #keyScroll
+  >
+    <div class="search" [class.hidden]="!searchVisible" #targetDiv>
+      <div class="overflow-y-auto">
+        <!-- (keydown)="onKeyDown($event)" -->
+        <ul id="list" class="list-none my-3">
+          <!-- [class.active]="i === selectedIndex" -->
+          <li
+            *ngFor="let item of data; let i = index"
+            (click)="setData(item)"
+            [class.whitespace-nowrap]="optionLineBreack"
+            class="py-1 px-2 text-black dark:text-gray-200 hover:text-white hover:dark:bg-gray-800 hover:bg-blue-600 cursor-pointer rounded-sm overflow-ellipsis overflow-hidden "
+            [class]="item.label === inputValue ? 'bg-blue-600 dark:bg-gray-700 text-white' : ''"
+            [style.display]="
+              item.label?.toUpperCase().includes(inputText.toUpperCase())
+                ? 'block'
+                : 'none'
+            "
+          >
+            {{ item.label }}
+          </li>
+          @if(liSkeletonLoading){ @for (item of [1,2,3,4,5]; track $index) {
+
+          <li>
+            <span
+              class="animate-pulse form-control block w-full h-3 my-1 font-normal rounded bg-gray-300 dark:bg-gray-500"
+            ></span>
+          </li>
+          } } @if(!liSkeletonLoading){
+
+          <li class="px-2 dark:text-gray-200" [class.hidden]="hasFilteredItems()">No Data</li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

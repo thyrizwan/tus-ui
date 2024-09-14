@@ -1,0 +1,37 @@
+<label class="text-base font-medium dark:text-gray-200">
+  {{ label }}
+  <span
+    *ngIf="!mandatory"
+    class="bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-300 px-5 py-1 text-sm rounded-md"
+    >Optional</span
+  >
+</label>
+<div class="flex">
+  <div class="{{ isSkeletonLoading ? '' : 'mt-2' }} w-64 mx-1">
+    <tus-dial-code
+      height="h-12"
+      [setValue]="setDial"
+      [isSkeletonLoading]="isSkeletonLoading"
+      [isDisabled]="isLoading"
+      [defaultDialCode]="defaultDialCode"
+    />
+  </div>
+  @if(!isSkeletonLoading){
+  <input
+    class="form-control block w-full mt-2 pl-5 md:pl-7 h-12 text-base font-normal bg-clip-padding border-2 border-solid rounded transition ease-in-out m-0 border-gray-300 truncate focus:border-blue-600 focus:border-2 focus:outline-none hover:border-blue-300 {{
+      readonly
+        ? 'opacity-75 bg-gray-200 cursor-not-allowed border-gray-200 focus:border-gray-200'
+        : ''
+    }} dark:text-gray-200 dark:bg-gray-900 dark:border-gray-500 hover:dark:border-gray-400 dark:border-0"
+    [placeholder]="placeholder"
+    [type]="type"
+    [formControl]="control"
+    [readOnly]="readonly"
+  />
+  } @else {
+  <span
+    role="status"
+    class="animate-pulse form-control block w-full h-12 font-normal rounded bg-gray-300 dark:bg-gray-700"
+  ></span>
+  }
+</div>

@@ -1,0 +1,360 @@
+<div class="inline-block min-w-full py-2 relative">
+  <div class="border-2 rounded-md bg-white hello" #myDiv>
+    <div class="p-4 flex items-center justify-between" *ngIf="isHeaderShow">
+      <span class="text-xl font-bold hidden md:block">{{ tableHeading }}</span>
+      <div
+        class="flex gap-4 flex-col-reverse md:flex-row items-start md:items-center justify-start md:justify-end"
+      >
+        <input
+          *ngIf="showSearch"
+          class="border-2 h-10 pl-3 rounded-md focus:outline-2 text-sm focus:outline-steelam-600"
+          type="text"
+          #searchInput
+          placeholder="Search ..."
+          (input)="setSearch()"
+          [(ngModel)]="inputText"
+        />
+        <div class="flex items-center" *ngIf="displayedData.length > 0">
+          <div class="w-32 flex items-center gap-3">
+            <span class="font-semibold">Rows: </span>
+            <tus-select
+              [data]="rowSelect"
+              [defaultValue]="defaultValue"
+              [isClear]="isClear"
+              [isReadOnly]="isReadOnly"
+              [setValue]="setValue"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- w-[19rem] md:w-[31.5rem] lg:w-[45rem] xl:w-[75rem] -->
+    <div
+      class="mx-3 overflow-auto relative whitespace-nowrap min-h-[350px] max-h-[375px] mt-3"
+      [style.width]="getDynamicWidth()"
+    >
+      <table class="w-full">
+        <thead
+          class="bg-gray-100 border-b-2 border-gray-200 sticky -top-1 z-[1]"
+        >
+          <tr>
+            <th
+              *ngFor="let head of header"
+              scope="col"
+              class="p-3 text-sm font-semibold tracking-wide text-left overflow-hidden"
+            >
+              <div
+                class="flex items-center justify-start"
+                [style.width]="head.width"
+              >
+                <span class="pr-1">
+                  {{ head.name }}
+                </span>
+                <div
+                  class="flex items-center justify-start"
+                  *ngIf="head.isSort"
+                >
+                  <span
+                    *ngIf="head.isSort"
+                    class="text-gray-500 mt-1 pl-[1px] cursor-pointer"
+                    (click)="toggleSort(head)"
+                  >
+                    <!-- <ng-icon
+                      *ngIf="head.sortDirection == 'desc'; else dropUp"
+                      name="bootstrapCaretUpFill"
+                    ></ng-icon> -->
+                    <ng-template #dropUp>
+                      <!-- <ng-icon name="bootstrapCaretDownFill"></ng-icon> -->
+                    </ng-template>
+                  </span>
+                  <!-- <div
+                        *ngIf="head.isSearch && head.isSort"
+                        class="w-0.5 bg-gray-600 h-4"
+                      ></div>
+                      <span
+                        *ngIf="head.isSearch"
+                        class="text-[12px] text-gray-900 font-bold cursor-pointer mt-1"
+                      >
+                        <ng-icon
+                          name="bootstrapSearch"
+                          (click)="setSearchValue(head.row)"
+                        ></ng-icon
+                      ></span> -->
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          *ngIf="!isSkeletonLoading; else skeleton"
+          class="divide-y divide-gray-100 -z-10"
+          #actionDiv
+        >
+          <tr
+            *ngFor="let item of displayedData; let i = index"
+            class="bg-white tabledata"
+          >
+            <td
+              *ngFor="let column of header"
+              [style.width]="column.width"
+              class="p-3 text-gray-700"
+            >
+              @if(column.type == 'action'){ @if(isActionShow){
+              <div class="relative pl-5">
+                <span
+                  class="cursor-pointer"
+                  (click)="handleTableAction(item, item.showAction)"
+                >
+                  <!-- <ng-icon name="bootstrapThreeDotsVertical"></ng-icon -->
+                  ></span
+                >
+                <div
+                  [ngClass]="column.multiple ? 'tableAction' : ''"
+                  class="absolute bg-sky-50 dark:bg-gray-300 rounded-md shadow-md -top-2 -left-14 flex flex-col space-y-2 items-center justify-center cursor-pointer z-20"
+                  [class]="
+                    column.classCondition ? column.classCondition(item) : ''
+                  "
+                  [ngClass]="column.left"
+                  [style.display]="item.showAction ? 'block' : 'none'"
+                >
+                  @for (action of column.actions; track $index) {
+                  @if(action.selector){ @if(action.selector(item)){
+                  <div
+                    class="{{ action.class }}"
+                    (click)="action.action(item[action.row])"
+                  >
+                    <span class="flex items-center gap-2">
+                      <!-- <ng-icon
+                        *ngIf="action.isIcon"
+                        [class]="action.iconClass"
+                        name="{{ action.icon }}"
+                      ></ng-icon> -->
+                      <span [class]="action.labelClass">
+                        {{ action.selector(item) }}
+                      </span>
+                    </span>
+                  </div>
+                  } } @else {
+                  <div
+                    class="{{ action.class }}"
+                    (click)="action.action(item[action.row])"
+                  >
+                    <span class="flex items-center gap-2">
+                      <!-- <ng-icon
+                        *ngIf="action.isIcon"
+                        [class]="action.iconClass"
+                        name="{{ action.icon }}"
+                      ></ng-icon> -->
+                      <span [class]="action.labelClass">
+                        {{ action.label }}
+                      </span>
+                    </span>
+                  </div>
+                  } }
+                </div>
+              </div>
+              } } @else if (column.type == 'checkbox') {
+              <div
+                class="w-28"
+                [style.width]="column.width"
+                [class]="
+                  column.classCondition ? column.classCondition(item) : ''
+                "
+              >
+                <tus-check-box
+                  [isChecked]="column.selector(item)"
+                  (onChange)="column.action(item)"
+                />
+              </div>
+              }@else if (column.type == 'image') {
+              <div
+                class="w-auto"
+                [class]="
+                  column.classCondition ? column.classCondition(item) : ''
+                "
+              >
+                <img
+                  [src]="column.selector(item)"
+                  alt="image"
+                  class="w-16 h-16 rounded cursor-pointer"
+                  [style.width]="column.width"
+                  (click)="column.action(item, i)"
+                  loading="lazy"
+                />
+              </div>
+              } @else if (column.type == 'button') {
+              <div
+                class="w-auto"
+                [style.width]="column.width"
+                [class]="
+                  column.classCondition ? column.classCondition(item) : ''
+                "
+              >
+                <button
+                  type="button"
+                  [disabled]="
+                    column.getDisabled ? column.getDisabled(i) : false
+                  "
+                  [class]="
+                    column.buttonClass
+                      ? column.buttonClass(item)
+                      : 'inline-flex w-full px-1 justify-center py-2 leading-6 text-white transition duration-150 ease-in-out rounded-md shadow hover:bg-steelam-800 bg-steelam-600 cursor-pointer'
+                  "
+                  (click)="column.action(item, i)"
+                >
+                  {{ column.selector ? column.selector(item) : column.label }}
+                </button>
+              </div>
+              } @else if (column.type == 'select') {
+              <div class="w-32 pr-4" [style.width]="column.width">
+                <select
+                  class="focus:outline-0 px-2 rounded-md border-2 w-full pr-10 h-10 whitespace-nowrap overflow-ellipsis overflow-hidden"
+                  (change)="column.action($event, item)"
+                >
+                  <option>Select</option>
+                  @for (data of column.data; track $index) {
+                  <option value="{{ data.value }}">
+                    {{ data.label }}
+                  </option>
+                  }
+                </select>
+              </div>
+              } @else {
+              <div
+                class="w-auto whitespace-nowrap overflow-ellipsis overflow-hidden px-2"
+                [style.width]="column.width"
+                [class]="
+                  column.classCondition ? column.classCondition(item) : ''
+                "
+              >
+                @if(column.type == 'price'){
+
+                {{ column.selector(item) | currency : "INR" }}
+                } @else {
+                {{ column.selector(item) }}
+                }
+              </div>
+              }
+            </td>
+          </tr>
+        </tbody>
+
+        <!-- Skeliton Loading -->
+        <ng-template #skeleton>
+          <tbody class="h-36">
+            <tr class="">
+              <td *ngFor="let head of header">
+                <span
+                  class="animate-pulse w-24 form-control block pr-1 h-2.5 font-normal rounded bg-gray-300"
+                ></span>
+              </td>
+            </tr>
+            <tr class="">
+              <td *ngFor="let head of header">
+                <span
+                  class="animate-pulse w-24 form-control block pr-1 h-2.5 font-normal rounded bg-gray-300"
+                ></span>
+              </td>
+            </tr>
+            <tr class="">
+              <td *ngFor="let head of header">
+                <span
+                  class="animate-pulse w-24 form-control block pr-1 h-2.5 font-normal rounded bg-gray-300"
+                ></span>
+              </td>
+            </tr>
+            <tr class="">
+              <td *ngFor="let head of header">
+                <span
+                  class="animate-pulse w-24 form-control block pr-1 h-2.5 font-normal rounded bg-gray-300"
+                ></span>
+              </td>
+            </tr>
+          </tbody>
+        </ng-template>
+      </table>
+
+      <div
+        *ngIf="displayedData.length == 0 && !isSkeletonLoading"
+        class="w-full"
+      >
+        <div
+          class="w-full flex items-center justify-center h-36 font-semibold text-xl"
+        >
+          {{ noData }}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex h-24 md:h-4 totalData items-center p-2 md:p-8 space-x-2 justify-end border-t-2 border-gray-200"
+      *ngIf="displayedData.length > 0 && !isSkeletonLoading"
+    >
+      <div
+        class="w-full h-full flex flex-col md:flex-row items-start justify-center md:items-center md:justify-end"
+      >
+        <!-- <div class="flex items-center">
+              <div class="w-32 absolute flex items-center gap-3">
+                <span>rows: </span>
+                <app-select
+                  [data]="rowSelect"
+                  [defaultValue]="defaultValue"
+                  [isClear]="isClear"
+                  [isReadOnly]="isReadOnly"
+                  [setValue]="setValue"
+                />
+              </div>
+            </div> -->
+        <div class="pr-0 md:pr-12 pb-5 md:pb-0">
+          <span class="text-gray-500 text-sm"
+            >Showing {{ displayedData.length }} of {{ data.length }}</span
+          >
+        </div>
+        <div
+          class="flex items-center justify-center bg-white rounded-md border"
+          *ngIf="displayedData.length > 0"
+        >
+          <button
+            class="border-r rounded-l-md cursor-pointer p-1 px-3 hover:text-white hover:bg-steelam-600"
+            (click)="firstPage()"
+          >
+            <!-- <ng-icon name="bootstrapChevronDoubleLeft" class="pt-0.5"></ng-icon> -->
+          </button>
+          <button
+            class="border-r cursor-pointer p-1 px-3 hover:text-white hover:bg-steelam-600"
+            (click)="backBtn()"
+            [disabled]="currentPage === 1"
+          >
+            <!-- <ng-icon name="bootstrapChevronLeft" class="pt-0.5"></ng-icon> -->
+          </button>
+          <ul class="flex">
+            <li
+              *ngFor="let pageNumber of visiblePageNumbers"
+              class="border-r cursor-pointer p-1 px-3 hover:text-white hover:bg-steelam-600"
+              [class.active]="currentPage === pageNumber"
+              (click)="goToPage(pageNumber)"
+            >
+              {{ pageNumber }}
+            </li>
+          </ul>
+          <button
+            class="border-r cursor-pointer p-1 px-3 hover:text-white hover:bg-steelam-600"
+            (click)="nextBtn()"
+            [disabled]="currentPage === data.length"
+          >
+            <!-- <ng-icon name="bootstrapChevronRight" class="pt-0.5"></ng-icon> -->
+          </button>
+          <button
+            class="cursor-pointer rounded-r-md p-1 px-3 hover:text-white hover:bg-steelam-600"
+            (click)="lastPage()"
+          >
+            <!-- <ng-icon
+              name="bootstrapChevronDoubleRight"
+              class="pt-0.5"
+            ></ng-icon> -->
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

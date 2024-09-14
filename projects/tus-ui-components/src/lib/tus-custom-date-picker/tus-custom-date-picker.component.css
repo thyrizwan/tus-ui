@@ -1,0 +1,405 @@
+/* * {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  color: #546e7a;
+  background-color: #f5f5f5;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+} */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: button;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  display: none;
+}
+
+/* Show the increment and decrement buttons on focus */
+input[type="number"]:focus::-webkit-inner-spin-button,
+input[type="number"]:focus::-webkit-outer-spin-button {
+  display: block;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: none;
+  outline: none;
+}
+
+abbr {
+  border: none;
+  text-decoration: none;
+}
+
+/* Input box */
+
+.calendar-box {
+  text-align: center;
+  /* margin-left: 100px; */
+  width: 100%;
+}
+
+.calendar-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Date picker Div */
+
+.calendar {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 280px;
+  position: absolute;
+  z-index: 2;
+  margin-top: 10px;
+}
+
+/* Day Model Div */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 0.25rem 0;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #000;
+}
+
+#prevBtn {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  padding-left: 16px;
+}
+#nextBtn {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  padding-right: 16px;
+}
+
+/* day Model Div where Month and year Showing */
+#monthYear {
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* day Model Div where Month and year Showing */
+.topMonthYear {
+  display: flex;
+}
+
+/* Day Model Header Month Dropdown */
+.monthDropDown {
+  display: flex;
+  justify-content: left;
+  padding-right: 7px;
+}
+
+/* Day Model Header Year Dropdown */
+.yearDropDown {
+  display: flex;
+  justify-content: right;
+  /* padding-right: 15px; */
+}
+
+/* Day Model Header Dropdown Icon */
+.dropDownIcon {
+  padding-top: 5px;
+}
+/* Day Css */
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* gap: 2px; */
+  padding: 0px 10px 10px 10px;
+}
+
+.day {
+  display: block;
+  border-radius: 0.25rem;
+  line-height: 2rem;
+  transition: 0.3s all;
+  color: #000;
+  font-size: 14px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 500;
+  grid-column: span 1;
+}
+
+.prevday {
+  display: block;
+  border-radius: 0.25rem;
+  line-height: 2rem;
+  transition: 0.3s all;
+  color: #888;
+  font-size: 14px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  grid-column: span 1;
+}
+
+.day:hover {
+  color: white;
+  background-color: #1e40af;
+}
+
+/* Bar/Day Name */
+
+.bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  padding: 5px 10px 0px 10px;
+}
+
+.bar {
+  display: block;
+  line-height: 2rem;
+  transition: 0.3s all;
+  color: #000;
+  font-size: 13px;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: 700;
+}
+
+/* Month Css */
+
+.months {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 10px;
+}
+
+.month {
+  display: block;
+  border-radius: 0.25rem;
+  line-height: 2rem;
+  transition: 0.3s all;
+  color: #000;
+  font-size: 16px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 500;
+  /* padding: 5px; */
+}
+
+.month:hover {
+  color: white;
+  background-color: #1e40af;
+}
+
+/* Year Css */
+
+.years {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  padding: 10px;
+}
+
+.year {
+  display: block;
+  border-radius: 0.25rem;
+  line-height: 2rem;
+  transition: 0.3s all;
+  color: #000;
+  font-size: 14px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.year:hover {
+  color: white;
+  background-color: #1e40af;
+}
+
+/* Present Day, Moth, Year */
+
+.current {
+  background-color: #2563eb;
+  color: white;
+  border-radius: 0.25rem;
+}
+
+.selected {
+  background-color: #1e40af;
+  color: white;
+  border-radius: 0.25rem;
+}
+
+.maxDate {
+  color: #888;
+}
+
+/* Input box
+#datePickerDateInput {
+  width: 100%;
+  padding: 8px;
+  border: 2px solid #ccd1d8;
+  border-radius: 5px;
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+} */
+
+#datePickerDateInput:disabled {
+  opacity: 0.75;
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+  cursor: not-allowed;
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+}
+
+#datePickerDateInput:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(37 99 235 / var(--tw-border-opacity));
+}
+
+/* Time Div */
+.timeDiv {
+  height: 64px;
+  margin-left: 12px;
+  margin-right: 12px;
+  border-top-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(156 163 175 / var(--tw-border-opacity));
+}
+
+/* Inside Time Div Next div */
+.timeDivTwo {
+  padding-top: 0.75rem /* 12px */;
+  padding-bottom: 0.75rem /* 12px */;
+  display: flex;
+  gap: 0.5rem /* 8px */;
+  align-items: center;
+  justify-content: left;
+}
+
+.resetButton {
+  padding-top: 0.25rem /* 4px */;
+  padding-bottom: 0.25rem /* 4px */;
+  padding-left: 0.5rem /* 8px */;
+  padding-right: 0.5rem /* 8px */;
+  border-radius: 0.375rem /* 6px */;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+}
+
+.resetButton:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 64 175 / var(--tw-bg-opacity));
+}
+
+/* Inside time div in which main time showing */
+.mainTime {
+  margin-left: 0.75rem /* 12px */;
+  margin-right: 0.75rem /* 12px */;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hour {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.hourInput {
+  width: 1.5rem /* 24px */;
+  --tw-border-opacity: 1;
+  border-color: rgb(156 163 175 / var(--tw-border-opacity));
+  padding-left: 0.25rem /* 4px */;
+  padding-right: 0.25rem /* 4px */;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-style: none;
+}
+
+.hourInput:focus {
+  width: 2.5rem /* 40px */;
+}
+
+.minute {
+  font-weight: 600;
+  font-size: 16px;
+  padding-left: 0.25rem /* 4px */;
+  padding-right: 0.25rem /* 4px */;
+}
+
+.minuteInput {
+  width: 1.25rem /* 20px */;
+  --tw-border-opacity: 1;
+  border-color: rgb(156 163 175 / var(--tw-border-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-style: none;
+}
+
+.minuteInput:focus {
+  width: 2rem /* 32px */;
+}
+
+.terestrialTime {
+  width: 1.25rem /* 20px */;
+}
+
+.okButton {
+  margin-right: 1rem /* 16px */;
+  margin-left: 20px;
+  padding-top: 0.25rem /* 4px */;
+  padding-bottom: 0.25rem /* 4px */;
+  padding-left: 0.5rem /* 8px */;
+  padding-right: 0.5rem /* 8px */;
+  border-radius: 0.375rem /* 6px */;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+}
+
+.okButton:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 64 175 / var(--tw-bg-opacity));
+}

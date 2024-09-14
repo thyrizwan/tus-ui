@@ -1,0 +1,38 @@
+.link {
+  background-position: 0 -24px;
+  transition: background-position 0.5s;
+}
+
+.active {
+  color: white;
+  background-color: #2563ee;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+
+.tabledata td:last-child{
+  position: absolute;
+
+}
+
+.tabledata:nth-child(n+6) .tableAction {
+  top: -4rem;
+}
+
+.tabledata:only-child .tableAction{
+  top: -3.5rem;
+}
+
+/* @media only screen and (max-width: 425px){
+  .tabledata td:last-child{
+    position: relative;
+  }
+  .last-row-table-action{
+    top: -6rem;
+  }
+}
+@media only screen and (min-width: 425px){
+  .last-row-table-action{
+    top: -6rem;
+  }
+} */
