@@ -25,16 +25,18 @@
           : ''
       "
       [(ngModel)]="inputValue"
-      (input)="getInput()"
       [readonly]="isReadOnly"
       [disabled]="isDisabled"
       (input)="setSearch()"
       [class]="height"
+      tabindex="0"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
     />
 
     <div
       *ngIf="isDropDown; else beforeFocus"
-      class="absolute cursor-pointer "
+      class="absolute cursor-pointer"
       [class.hidden]="!searchVisible"
       [class]="isPlusIcon ? 'right-16 ' : 'right-2'"
     >
@@ -100,7 +102,9 @@
   </ng-template>
   <div
     *ngIf="isPlusIcon && !isSkeletonLoading"
-    class="h-12 bg-white border-2 w-14 rounded-r-md cursor-pointer hover:bg-red-600 group -ml-2 z-0 flex items-center justify-center text-2xl absolute right-0 {{ labelText ? 'top-8' : '-top-0' }} dark:bg-gray-900 dark:border-gray-500 hover:dark:border-gray-400"
+    class="h-12 bg-white border-2 w-14 rounded-r-md cursor-pointer hover:bg-red-600 group -ml-2 z-0 flex items-center justify-center text-2xl absolute right-0 {{
+      labelText ? 'top-8' : '-top-0'
+    }} dark:bg-gray-900 dark:border-gray-500 hover:dark:border-gray-400"
     (click)="onPlusIconClickFnc()"
   >
     <svg
@@ -119,21 +123,23 @@
   </div>
 
   <div
-    class="w-full overflow-y-auto bg-white dark:bg-gray-900 max-h-60 z-10 absolute mt-1 transition ease-in-out"
-    [class]="searchVisible ? 'border-2 dark:border-gray-500 rounded-md' : 'border-0'"
+    class="w-full overflow-y-auto bg-white max-h-60 z-10 absolute mt-1 transition ease-in-out"
+    [class]="searchVisible ? 'border-2 rounded-md' : 'border-0'"
     #keyScroll
   >
     <div class="search" [class.hidden]="!searchVisible" #targetDiv>
       <div class="overflow-y-auto">
         <!-- (keydown)="onKeyDown($event)" -->
         <ul id="list" class="list-none my-3">
-          <!-- [class.active]="i === selectedIndex" -->
           <li
             *ngFor="let item of data; let i = index"
             (click)="setData(item)"
             [class.whitespace-nowrap]="optionLineBreack"
-            class="py-1 px-2 text-black dark:text-gray-200 hover:text-white hover:dark:bg-gray-800 hover:bg-blue-600 cursor-pointer rounded-sm overflow-ellipsis overflow-hidden "
-            [class]="item.label === inputValue ? 'bg-blue-600 dark:bg-gray-700 text-white' : ''"
+            class="py-1 px-2 text-black hover:text-white hover:bg-steelam-600 cursor-pointer rounded-sm overflow-ellipsis overflow-hidden"
+            [class]="
+              item.label === inputValue ? 'bg-steelam-600 text-white' : ''
+            "
+            [class.active]="i === selectedIndex"
             [style.display]="
               item.label?.toUpperCase().includes(inputText.toUpperCase())
                 ? 'block'
@@ -142,17 +148,7 @@
           >
             {{ item.label }}
           </li>
-          @if(liSkeletonLoading){ @for (item of [1,2,3,4,5]; track $index) {
-
-          <li>
-            <span
-              class="animate-pulse form-control block w-full h-3 my-1 font-normal rounded bg-gray-300 dark:bg-gray-500"
-            ></span>
-          </li>
-          } } @if(!liSkeletonLoading){
-
-          <li class="px-2 dark:text-gray-200" [class.hidden]="hasFilteredItems()">No Data</li>
-          }
+          <li class="px-2" [class.hidden]="hasFilteredItems()">No Data</li>
         </ul>
       </div>
     </div>

@@ -91,6 +91,7 @@
           #actionDiv
         >
           <tr
+            (click)="handleClick(i)"
             *ngFor="let item of displayedData; let i = index"
             class="bg-white tabledata"
           >
@@ -358,3 +359,91 @@
     </div>
   </div>
 </div>
+
+@if(dataViewShow){
+<div
+  id="sidebar"
+  class="fixed right-0 top-0 w-[90%] md:w-[60%] lg:w-[50%] xl:w-[40%] h-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 pb-3"
+  [ngClass]="{ 'translate-x-0': isOpen, 'translate-x-full': !isOpen }"
+>
+  <div class="px-3 pt-2 pb-6">
+    <div class="items-end text-end">
+      <button
+        (click)="closeSidebar()"
+        class="px-1 py-0.5 text-white bg-red-500 rounded"
+      >
+        X
+      </button>
+    </div>
+    <div class="h-[95vh] overflow-y-auto">
+      @if(rowData){
+      <div>
+        <div
+          *ngFor="let column of dataHeader"
+          [style.width]="column.width"
+          class="p-3 text-gray-700"
+        >
+          @if (column.type == 'image') {
+          <div class="w-full flex flex-wrap">
+            <span class="font-semibold pr-2">{{ column.name }} : </span>
+            <div
+              class="w-auto"
+              [class]="
+                column.classCondition ? column.classCondition(rowData) : ''
+              "
+            >
+              <img
+                [src]="column.selector(rowData)"
+                alt="image"
+                class="w-6 h-6 rounded-full cursor-pointer"
+                [style.width]="column.width"
+                (click)="column.action(rowData)"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          } @else if (column.type == 'status') {
+          <div
+            class="w-auto"
+            [style.width]="column.width"
+            [class]="
+              column.classCondition ? column.classCondition(rowData) : ''
+            "
+          >
+            <!-- <app-status-checkbox
+              [isChecked]="column.selector(rowData)"
+              (onChange)="column.action(rowData)"
+            /> -->
+          </div>
+          } @else {
+
+          <div class="w-full flex flex-wrap">
+            <span class="font-semibold pr-2">{{ column.name }} : </span>
+            <div
+              class="w-auto"
+              [style.width]="column.width"
+              [class]="
+                column.classCondition ? column.classCondition(rowData) : ''
+              "
+            >
+              @if(column.type == 'price'){
+
+              {{ column.selector(rowData) | currency : "INR" }}
+              } @else {
+              {{ column.selector(rowData) }}
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      } @else {
+      <div class="flex justify-center items-center">
+        <h1>Nothing To Show</h1>
+      </div>
+      }
+    </div>
+    <div class="py-1"></div>
+  </div>
+</div>
+}

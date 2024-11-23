@@ -45,7 +45,9 @@ export class TusSelectComponent {
   searchVisible = false;
   inputText = '';
   inputValue!: string;
-  selectedIndex: number = 0;
+  selectedIndex: number = -1;
+  isActive: boolean = false;
+  filteredData: any[] = [];
 
   ngOnInit() {
     if (this.defaultValue) {
@@ -91,22 +93,68 @@ export class TusSelectComponent {
   //   }
   // }
 
-  // scrollIntoView(isUP: boolean) {
-  //   const container = this.keyScroll.nativeElement;
-  //   if (isUP) {
-  //     if (this.selectedIndex == this.data.length - 1) {
-  //       container.scrollTop = container.scrollHeight;
-  //     } else if (this.selectedIndex >= 2) {
-  //       container.scrollTop -= 30;
-  //     }
-  //   } else {
-  //     if (this.selectedIndex == 0) {
-  //       container.scrollTop = 0;
-  //     } else if (this.selectedIndex >= 6 && this.data.length > 6) {
-  //       container.scrollTop += 30;
-  //     }
-  //   }
-  // }
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (!this.isActive || !this.hasFilteredItems()) return;
+
+    // Store the current filtered indexes for navigation
+    const filteredIndexes = this.filteredData.map((item) => item.originalIndex);
+    const currentFilteredIndex = filteredIndexes.indexOf(this.selectedIndex);
+
+    switch (event.key) {
+      case 'ArrowUp':
+        event.preventDefault();
+        // Navigate to the previous index in the filtered array
+        this.selectedIndex =
+          filteredIndexes[
+            (currentFilteredIndex - 1 + filteredIndexes.length) %
+              filteredIndexes.length
+          ];
+        this.scrollIntoView(true);
+        break;
+
+      case 'ArrowDown':
+        event.preventDefault();
+        // Navigate to the next index in the filtered array
+        this.selectedIndex =
+          filteredIndexes[(currentFilteredIndex + 1) % filteredIndexes.length];
+        this.scrollIntoView(false);
+        break;
+
+      case 'Enter':
+        event.preventDefault();
+        const selectedItem = this.data[this.selectedIndex];
+        if (selectedItem) {
+          this.setData(selectedItem);
+        }
+        break;
+    }
+  }
+
+  onFocus() {
+    this.isActive = true;
+  }
+
+  onBlur() {
+    this.isActive = false;
+  }
+
+  scrollIntoView(isUP: boolean) {
+    const container = this.keyScroll.nativeElement;
+    if (isUP) {
+      if (this.selectedIndex == this.data.length - 1) {
+        container.scrollTop = container.scrollHeight;
+      } else if (this.selectedIndex >= 2) {
+        container.scrollTop -= 30;
+      }
+    } else {
+      if (this.selectedIndex == 0) {
+        container.scrollTop = 0;
+      } else if (this.selectedIndex >= 6 && this.data.length > 6) {
+        container.scrollTop += 30;
+      }
+    }
+  }
 
   //To close the dic outside click
   @HostListener('document:click', ['$event'])
@@ -120,22 +168,34 @@ export class TusSelectComponent {
     }
   }
 
+  hasFilteredItems() {
+    return this.filteredData.length > 0;
+  }
+
   setSearch() {
     this.inputText = this.inputValue;
     this.searchVisible = true;
-  }
 
-  hasFilteredItems() {
-    return this.data.some((item: any) =>
-      item.label?.toUpperCase().includes(this.inputText.toUpperCase())
-    );
+    this.filteredData = this.data
+      .map((item, index) => ({ ...item, originalIndex: index }))
+      .filter((item: any) =>
+        item.label?.toUpperCase().includes(this.inputText.toUpperCase())
+      );
+
+    // Reset selectedIndex to start at the top of the filtered results
+    this.selectedIndex = this.filteredData.length ? -1 : -1;
   }
 
   show() {
     this.searchVisible = !this.searchVisible;
     this.isDropDown = !this.isDropDown;
+    if (this.searchVisible) {
+      this.filteredData = this.data.map((item, index) => ({
+        ...item,
+        originalIndex: index,
+      }));
+    }
   }
-
   clearValue() {
     this.inputText = '';
     this.inputValue = '';
