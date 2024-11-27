@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [NgIf, FormsModule, NgClass, NgFor],
   templateUrl: './tus-select.component.html',
-  styleUrl: './tus-select.component.css',
+  styleUrls: ['./tus-select.component.css','../tailwind.css']
 })
 export class TusSelectComponent {
   @Input() defaultValue: any;

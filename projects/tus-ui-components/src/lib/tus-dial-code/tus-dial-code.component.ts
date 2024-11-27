@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [NgIf, FormsModule, NgClass, NgFor],
   templateUrl: './tus-dial-code.component.html',
-  styleUrl: './tus-dial-code.component.css',
+  styleUrls: ['./tus-dial-code.component.css','../tailwind.css']
 })
 export class TusDialCodeComponent {
   @Input() defaultDialCode!: string;

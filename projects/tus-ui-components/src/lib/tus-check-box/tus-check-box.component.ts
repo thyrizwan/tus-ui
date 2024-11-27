@@ -7,7 +7,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [NgIf, FormsModule, ReactiveFormsModule],
   templateUrl: './tus-check-box.component.html',
-  styleUrl: './tus-check-box.component.css',
+  styleUrls: ['./tus-check-box.component.css','../tailwind.css']
 })
 export class TusCheckBoxComponent {
   @Input() control!: FormControl | any;

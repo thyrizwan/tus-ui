@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [NgIf, NgFor, NgClass, FormsModule],
   templateUrl: './tus-custom-date-picker.component.html',
-  styleUrl: './tus-custom-date-picker.component.css',
+  styleUrls: ['./tus-custom-date-picker.component.css','../tailwind.css']
 })
 export class TusCustomDatePickerComponent {
   @Input() startDate: any = '';

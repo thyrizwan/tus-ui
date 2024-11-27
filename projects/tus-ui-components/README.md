@@ -64,7 +64,7 @@ Import the components you need into your Angular standalone components or module
 
 ```typescript
 import { Component } from '@angular/core';
-import { TusButton, TusInput, TusDatePicker } from 'tus-ui-components';
+import { TusButtonComponent, TusInputComponent, TusDatePickerComponent } from 'tus-ui-components';
 
 @Component({
   standalone: true,

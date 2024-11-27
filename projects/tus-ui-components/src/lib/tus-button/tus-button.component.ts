@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: true,
   imports: [NgIf],
   templateUrl: './tus-button.component.html',
-  styleUrl: './tus-button.component.css'
+  styleUrls: ['./tus-button.component.css','../tailwind.css']
 })
 export class TusButtonComponent {
 

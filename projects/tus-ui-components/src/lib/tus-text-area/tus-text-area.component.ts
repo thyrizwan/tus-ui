@@ -7,7 +7,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [NgIf, FormsModule, ReactiveFormsModule],
   templateUrl: './tus-text-area.component.html',
-  styleUrl: './tus-text-area.component.css',
+  styleUrls: ['./tus-text-area.component.css','../tailwind.css']
 })
 export class TusTextAreaComponent {
   @Input() control!: FormControl | any;

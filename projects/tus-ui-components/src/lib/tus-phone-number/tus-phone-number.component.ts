@@ -8,7 +8,7 @@ import { TusDialCodeComponent } from '../tus-dial-code/tus-dial-code.component';
   standalone: true,
   imports: [NgIf, TusDialCodeComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './tus-phone-number.component.html',
-  styleUrl: './tus-phone-number.component.css',
+  styleUrls: ['./tus-phone-number.component.css','../tailwind.css']
 })
 export class TusPhoneNumberComponent {
   @Input() isLoading: boolean = false;

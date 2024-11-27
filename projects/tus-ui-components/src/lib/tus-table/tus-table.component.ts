@@ -27,7 +27,7 @@ import { TusSelectComponent } from '../tus-select/tus-select.component';
     CurrencyPipe,
   ],
   templateUrl: './tus-table.component.html',
-  styleUrl: './tus-table.component.css',
+  styleUrls: ['./tus-table.component.css','../tailwind.css']
 })
 export class TusTableComponent {
   @Input() data: any[] = [];
