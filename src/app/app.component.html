@@ -19,6 +19,7 @@
         labelText="Select Lable"
         [height]="'h-12'"
         [mandatory]="true"
+        [setValue]="setSelect"
         [isSkeletonLoading]="false"
       />
     </div>
@@ -98,6 +99,8 @@
         [header]="header"
         tableHeading="Diagnosis"
         [isSkeletonLoading]="false"
+        [dataViewShow]="true"
+        [dataHeader]="header"
       />
     </div>
 

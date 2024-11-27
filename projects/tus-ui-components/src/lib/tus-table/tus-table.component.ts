@@ -52,7 +52,9 @@ export class TusTableComponent {
     },
   ];
   @Input() tableHeading: string = 'Table Heading';
-
+  rowData: any;
+  @Input() dataHeader: any[] = [];
+  @Input() dataViewShow: boolean = false;
   //serch input
   inputText!: string;
   showSearch: boolean = false;
@@ -76,9 +78,11 @@ export class TusTableComponent {
 
   // This is for data action
   secondData: any[] = [];
-
+  isOpen = false;
   screenWidth!: any;
   noData!: string;
+  private clickTimeout: any = null;
+  private singleClickDelay = 250;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -121,6 +125,33 @@ export class TusTableComponent {
 
     const observer = new ResizeObserver(observerCallback);
     observer.observe(this.myDiv.nativeElement);
+  }
+
+  handleClick(index: number) {
+    if (this.dataViewShow) {
+      if (this.clickTimeout) {
+        clearTimeout(this.clickTimeout);
+        this.clickTimeout = null;
+        // Double-click detected
+        this.rowData = this.displayedData[index];
+        this.openSidebar();
+      } else {
+        this.clickTimeout = setTimeout(() => {
+          this.clickTimeout = null;
+          // Single-click detected
+          this.rowData = '';
+          this.closeSidebar();
+        }, this.singleClickDelay);
+      }
+    }
+  }
+
+  openSidebar() {
+    this.isOpen = true;
+  }
+
+  closeSidebar() {
+    this.isOpen = false;
   }
 
   getDynamicWidth(): any {

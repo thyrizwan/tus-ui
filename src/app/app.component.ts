@@ -118,6 +118,8 @@ export class AppComponent {
     },
   ];
 
+  setSelect = (value: any) => {};
+
   setDate(value: any) {
     this.startDate = value?.startDate;
     this.endDate = value?.endDate;
